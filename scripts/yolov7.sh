@@ -1,6 +1,12 @@
-#!/usr/bin/env bash
-#SBATCH -t 0-16:00:00
-#SBATCH -N 1
+#!/bin/bash
+#
+#SBATCH --nodes 1
+#SBATCH --ntasks-per-node 1
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task 16
+#SBATCH --mem-per-gpu 64G
+#SBATCH --output /workspaces/%u/pmb-nll/logs/slurm-%j-run.out
+#SBATCH --partition zprod
 
 singularity exec --bind /datasets:/datasets --bind /staging:/staging --bind /workspaces:/workspaces \
     --nv \
