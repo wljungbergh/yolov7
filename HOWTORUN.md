@@ -1,5 +1,5 @@
 # How to run face anonymization
-
+## Detection / Inference
 ### Step one
 Download the trained weights (attached in the submitted zip-file).
 
@@ -23,3 +23,6 @@ If you wish to only see bounding boxes, leave out the `--blur` flag
 
 ### Step four
 Enjoy life as a person whose privacy has remained intact.
+
+## Training
+We created the `create_labels_and_datalists.py` to preprocess the annotations into the correct format required by the `yolov7` framework. Note that this have been designed to work with the dataset structure that we have on our compute platform. This might need some tweaking if used
