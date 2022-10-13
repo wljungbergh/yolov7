@@ -3,7 +3,7 @@
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 1
 #SBATCH --gres=gpu:1
-#SBATCH --output /workspaces/%u/pmb-nll/logs/slurm-%j-run.out
+#SBATCH --output /workspaces/%u/yolov7logs/slurm-%j-run.out
 #SBATCH --partition zprod
 
 singularity exec --bind /datasets:/datasets --bind /staging:/staging --bind /workspaces:/workspaces \
