@@ -54,10 +54,16 @@ def butter_lowpass_filtfilt(data, cutoff=1500, fs=50000, order=5):
     return filtfilt(b, a, data)  # forward-backward filter
 
 
-def blur_one_box(xyxy, img):
+def blur_one_box(xyxy, img) -> None:
     # Blur one bounding box on image img
     x1, y1, x2, y2 = [int(x) for x in xyxy]
-    img[y1:y2, x1:x2] = cv2.GaussianBlur(img[y1:y2, x1:x2], (99, 99), 30)
+    # Create an elipsoid mask that spans the bounding box
+    mask = np.zeros((y2-y1, x2-x1), dtype=np.uint8)
+    cv2.ellipse(mask, (int((x2-x1)/2), int((y2-y1)/2)), (int((x2-x1)/2), int((y2-y1)/2)), 0, 0, 360, 255, -1)
+    # Create a blurred version of the bounding box
+    blurred = cv2.GaussianBlur(img[y1:y2, x1:x2], (99, 99), 100)
+    # Copy the blurred version into the mask
+    img[y1:y2, x1:x2][mask == 255] = blurred[mask == 255]
 
 
 def plot_one_box(x, img, color=None, label=None, line_thickness=3):
