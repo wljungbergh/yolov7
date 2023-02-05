@@ -7,6 +7,7 @@ import numpy as np
 from tqdm import tqdm
 
 HEAD_IDX = 13
+BAD_LICENSES = [0,1,2]
 
 
 def get_densepose_mask(polygons):
@@ -41,8 +42,10 @@ def main():
     with open(input_file, "r") as f:
         data = json.load(f)
 
-    annotations = data["annotations"]
-    images = data["images"]
+    
+    images = [img for img in data["images"] if int(img["license"]) not in BAD_LICENSES]
+    img_ids = set([img["id"] for img in images])
+    annotations = [ann for ann in data["annotations"] if ann["image_id"] in img_ids]
 
     # get the height and width of the each image
     image_id_to_hw = {
@@ -110,5 +113,8 @@ def main():
     filenames = [
         f"./images/{train_or_val}2014/" + image["file_name"] for image in images
     ]
-    with open(f"coco/{train_or_val}2014.txt", "w") as f:
+    with open(f"coco/{train_or_val}2014.txt", "a") as f:
         f.write("\n".join(filenames))
+
+if __name__ == "__main__":
+    main()
