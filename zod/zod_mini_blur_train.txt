@@ -1,0 +1,10 @@
+/staging/dataset_donation/round_2/single_frames/082291/camera_front_blur/082291_golf_2021-04-20T23:17:20.001688Z.jpg
+/staging/dataset_donation/round_2/single_frames/009158/camera_front_blur/009158_india_2020-11-21T09:44:55.445654Z.jpg
+/staging/dataset_donation/round_2/single_frames/065838/camera_front_blur/065838_golf_2020-10-10T10:42:09.883075Z.jpg
+/staging/dataset_donation/round_2/single_frames/087912/camera_front_blur/087912_golf_2020-10-29T14:47:10.887313Z.jpg
+/staging/dataset_donation/round_2/single_frames/083430/camera_front_blur/083430_oscar_2021-04-20T23:41:36.002429Z.jpg
+/staging/dataset_donation/round_2/single_frames/018591/camera_front_blur/018591_india_2020-07-24T07:08:56.778861Z.jpg
+/staging/dataset_donation/round_2/single_frames/070221/camera_front_blur/070221_golf_2020-10-10T10:40:46.448060Z.jpg
+/staging/dataset_donation/round_2/single_frames/044953/camera_front_blur/044953_india_2020-05-06T11:41:57.779576Z.jpg
+/staging/dataset_donation/round_2/single_frames/029229/camera_front_blur/029229_golf_2021-05-02T14:22:06.780681Z.jpg
+/staging/dataset_donation/round_2/single_frames/023996/camera_front_blur/023996_india_2021-04-15T14:52:36.885711Z.jpg
