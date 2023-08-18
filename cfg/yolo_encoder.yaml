@@ -2,7 +2,7 @@
 depth_multiple: 1.0  # model depth multiple
 width_multiple: 1.0  # layer channel multiple
 
-ckpt: weights/zod.pt
+ckpt: /staging/agp/willju/yolov7/weights/zod.pt
 
 # yolov7 backbone
 backbone:

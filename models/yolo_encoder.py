@@ -52,8 +52,11 @@ class Encoder(nn.Module):
             ckpt = torch.load(self.yaml["ckpt"])
             self.model.load_state_dict(ckpt, strict=False)
         else:
-            # Init weights, biases
             initialize_weights(self)
+        
+        # Init weights, biases
+        #self.float().eval()
+        self.stride = torch.tensor(64)
         self.info()
         logger.info("")
 
@@ -79,7 +82,7 @@ class Encoder(nn.Module):
 
     def forward_once(self, x, profile=False):
         y, dt = [], []  # outputs
-        for m in self.model:
+        for layer_index, m in enumerate(self.model):
             if m.f != -1:  # if not from previous layer
                 x = (
                     y[m.f]
@@ -94,6 +97,9 @@ class Encoder(nn.Module):
                 raise NotImplementedError("LOL")
 
             x = m(x)  # run
+
+            if abs(x.sum()) < 1e-5:
+                print("Fucked up at layer ", layer_index)
 
             y.append(x if m.i in self.save else None)  # save output
 
