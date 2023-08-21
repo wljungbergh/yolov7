@@ -2,6 +2,7 @@ import argparse
 import torch
 import yaml
 from tqdm import tqdm
+import os
 
 from models.yolo_encoder import Encoder
 from utils.datasets import create_dataloader
@@ -29,7 +30,6 @@ def main(
     half_precision=True
 ):
     device = select_device(opt.device, batch_size=batch_size)
-
     
     enc = Encoder(opt.cfg).to(device)
 
@@ -43,7 +43,6 @@ def main(
     if half:
         enc.half()
 
-
     enc.eval()
     if isinstance(data, str):
         with open(data) as f:
@@ -51,14 +50,15 @@ def main(
     check_dataset(data)  # check
 
     # Dataloader
-    
     if device.type != "cpu":
         enc(
             torch.zeros(1, 3, imgsz, imgsz)
             .to(device)
             .type_as(next(enc.parameters()))
         )  # run once
-    task = "val"
+    task = "test"
+    
+    assert batch_size == 1, "Feature caching assumes batch size 1"
     dataloader = create_dataloader(
         data[task],
         imgsz,
@@ -77,7 +77,7 @@ def main(
         with torch.no_grad():
             # Run model
             out = enc(img, augment=False)  # inference and training outputs
-        print("hello")
+            torch.save(out.squeeze(0), f"{opt.out_folder}/{task}/{os.path.basename(paths[0]).strip('.jpg')}.pt")
 
 
 if __name__ == "__main__":
@@ -99,6 +99,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--single-cls", action="store_true", help="treat as single-class dataset"
+    )
+    parser.add_argument(
+        "--out-folder", type=str, help="path to the directory where cached features should be stored", required=True
     )
     opt = parser.parse_args()
     opt.data = check_file(opt.data)  # check file
