@@ -45,17 +45,22 @@ class Encoder(nn.Module):
         self.model, self.save = parse_model(
             deepcopy(self.yaml), ch=[ch]
         )  # model, savelist
-        # print([x.shape for x in self.forward(torch.zeros(1, ch, 64, 64))])
 
         # load checkpoint
         if self.yaml["ckpt"]:
-            ckpt = torch.load(self.yaml["ckpt"])
-            self.model.load_state_dict(ckpt, strict=False)
+            ckpt = torch.load(self.yaml["ckpt"])["ema"]
+            sd = ckpt.state_dict()
+
+            sd_keys = list(sd.keys())
+            for k in sd_keys:
+                if not k in list(self.state_dict().keys()):
+                    del sd[k]
+            self.load_state_dict(sd, strict=False)
         else:
             initialize_weights(self)
         
         # Init weights, biases
-        #self.float().eval()
+        self.float().fuse().eval()
         self.stride = torch.tensor(64)
         self.info()
         logger.info("")
@@ -97,9 +102,6 @@ class Encoder(nn.Module):
                 raise NotImplementedError("LOL")
 
             x = m(x)  # run
-
-            if abs(x.sum()) < 1e-5:
-                print("Fucked up at layer ", layer_index)
 
             y.append(x if m.i in self.save else None)  # save output
 
