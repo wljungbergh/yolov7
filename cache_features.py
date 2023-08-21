@@ -41,7 +41,7 @@ def main(data, batch_size=32, imgsz=640, half_precision=True):
         enc(
             torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(enc.parameters()))
         )  # run once
-    task = "test"
+    task = opt.task
 
     dataloader = create_dataloader(
         data[task],
@@ -63,11 +63,11 @@ def main(data, batch_size=32, imgsz=640, half_precision=True):
             out = enc(img, augment=False)  # inference and training outputs
 
         for i, path in enumerate(paths):
+            filename = os.path.basename(path).split("_")[0]
             torch.save(
                 out[i],
-                f"{opt.out_folder}/{task}/{os.path.basename(path).strip('.jpg')}.pt",
+                f"{opt.out_folder}/{task}/{filename}.pt",
             )
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="cache_features.py")
@@ -91,6 +91,12 @@ if __name__ == "__main__":
         "--out-folder",
         type=str,
         help="path to the directory where cached features should be stored",
+        required=True,
+    )
+    parser.add_argument(
+        "--task",
+        type=str,
+        help="task for which features should be cached",
         required=True,
     )
     opt = parser.parse_args()
