@@ -13,11 +13,11 @@ singularity exec --bind /datasets:/datasets --bind /staging:/staging --bind /wor
     --nv \
     --pwd $REPO_ROOT \
     /staging/agp/geohe/containers/yolov7.sif \
-    python -u cache_features.py --workers 8\
+    python -u cache_features.py\
      --cfg $REPO_ROOT/cfg/yolo_encoder.yaml\
      --device 0\
      --batch-size 4\
      --data $REPO_ROOT/data/zod_original.yaml\
      --img 1920\
      --out-folder "/staging/agp/willju/zod_feature_cache"\
-     --task test\
+     --task $1\
